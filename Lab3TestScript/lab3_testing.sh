@@ -104,7 +104,7 @@ function set_virtual_nics_delay
 	echo ${PASSWORD} | sudo -S tc qdisc add dev lo:3 root netem delay ${DELAY}ms
 }
 
-function set_virtual_nics_delay
+function set_virtual_nics_packet_loss
 {
 	echo ${PASSWORD} | sudo -S tc qdisc add dev lo:0 root netem loss ${PACKET_LOSS_RATE}%
 	echo ${PASSWORD} | sudo -S tc qdisc add dev lo:1 root netem loss ${PACKET_LOSS_RATE}%
@@ -122,7 +122,7 @@ function init_network_env
 	# check_netcat
 	add_virtual_nics
 	set_virtual_nics_delay
-	set_virtual_nics_delay
+	set_virtual_nics_packet_loss
 }
 
 
@@ -472,7 +472,7 @@ function kill_and_restart_coordinator_robustly
 	echo "Kill coordinator and then restart."
 
 	kill -9 ${coordinator_pid}
-
+	sleep 1
 	run_kvstore2pcsystem_robustly START_COORDINATOR_ONLY
 
 	retval=$?
@@ -680,6 +680,7 @@ function test_item2
 printf -v standard_item3 "*1\r\n\$11\r\nitem3_value\r\n"
 function test_item3
 {
+	set_tag
 	echo "---------------------------------- Test item 3 ----------------------------------"
 	echo "Test item 3. Test point: Get the value of key."
 	# restart_kvstore2pcsystem_if_down_abnormally
@@ -700,7 +701,7 @@ function test_item3
 }
 
 
-standard_item4=$standard_nil
+standard_item4="$standard_nil"
 function test_item4
 {
 	set_tag
