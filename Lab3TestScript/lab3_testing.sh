@@ -166,7 +166,7 @@ function language_checking
 	java_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.java 2>/dev/null | wc -l`
 	jar_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/kvstore2pcsystem.jar 2>/dev/null | wc -l`
 	c_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.c 2>/dev/null | wc -l`
-	cpp_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.cc 2>/dev/null | wc -l`
+	cpp_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.cc *.cpp *.hpp 2>/dev/null | wc -l`
 	python_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.py 2>/dev/null | wc -l`
 	kvstore2pcsystem_py_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/kvstore2pcsystem.py 2>/dev/null | wc -l`
 
