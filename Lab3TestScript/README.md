@@ -2,7 +2,7 @@
 
 ### Usage
 
-`./lab3_testing ./Lab3 your_sudo_password`
+`./lab3_testing.sh ./Lab3 your_sudo_password`
 
 You need to pass 2 arguments (the lab3 path and your sudo password) to the script, **and that's enough**. 
 
