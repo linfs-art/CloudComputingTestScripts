@@ -250,7 +250,7 @@ function run_kvstore2pcsystem_c_and_other_language_robustly
 				if [[ $retval -eq 0 ]]
 				then
 					echo "Run participant[$i] successfully"
-					participants_pid[$j]=$!
+					participants_pid[$i]=$!
 					break
 				else
 					echo "Run participant[$i]. Retry times: [$j]"
@@ -313,7 +313,7 @@ function run_kvstore2pcsystem_java_robustly
 				if [[ $retval -eq 0 ]]
 				then
 					echo "Run participant[$i] successfully"
-					participants_pid[$j]=$!
+					participants_pid[$i]=$!
 					break
 				else
 					echo "Run participant[$i]. Retry times: [$j]"
@@ -374,7 +374,7 @@ function run_kvstore2pcsystem_python_robustly
 				if [[ $retval -eq 0 ]]
 				then
 					echo "Run participant[$i] successfully"
-					participants_pid[$j]=$!
+					participants_pid[$i]=$!
 					break
 				else
 					echo "Run participant[$i]. Retry times: [$j]"
