@@ -880,6 +880,12 @@ function cloud_roll_up
 	echo "---------------------------------- Global test done ----------------------------------"
 }
 
+function clean_up
+{
+	kill_coordinator_and_all_participants
+	remove_virtual_nics
+}
+
 function show_test_result
 {
 	echo "Language: [${TEST_RESULT_ARR[0]}]"
@@ -907,5 +913,6 @@ function prepare_test_env
 
 prepare_test_env
 cloud_roll_up
+clean_up
 show_test_result
 
