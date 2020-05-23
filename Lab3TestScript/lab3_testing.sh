@@ -782,8 +782,9 @@ function test_item7
 
 	send_set_command 9 item7_key 11 item7_value
 	send_del_command_1 9 item7_key
+	send_get_command 9 item7_key
 
-	if [[ $del_1_result = $standard_item7 ]]
+	if [[ $get_result = $standard_item7 ]]
 	then
 		echo "============================ [PASSED] : Test item 7 ============================"
 		return $PASSED
