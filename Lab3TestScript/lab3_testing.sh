@@ -40,10 +40,10 @@ TEST_RESULT_ARR=("")
 
 function get_absolute_path
 {
-	tmp_path=$1
+	tmp_path="$1"
 
-	root_dir="/.*"
-	if [[ $tmp_path =~ $root_dir ]]
+	# root_dir="/.*"
+	if [[ ${tmp_path:0:1} = "/" ]]
 	then
 		retval=$tmp_path
 		echo $retval
@@ -166,7 +166,7 @@ function language_checking
 	java_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.java 2>/dev/null | wc -l`
 	jar_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/kvstore2pcsystem.jar 2>/dev/null | wc -l`
 	c_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.c 2>/dev/null | wc -l`
-	cpp_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.cc *.cpp *.hpp 2>/dev/null | wc -l`
+	cpp_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.cc ${LAB3_ABSOLUTE_PATH}/*.cpp ${LAB3_ABSOLUTE_PATH}/*.hpp 2>/dev/null | wc -l`
 	python_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/*.py 2>/dev/null | wc -l`
 	kvstore2pcsystem_py_file_counter=`ls -1 ${LAB3_ABSOLUTE_PATH}/kvstore2pcsystem.py 2>/dev/null | wc -l`
 
@@ -407,7 +407,7 @@ function run_kvstore2pcsystem_robustly
 	if [ $programing_language -eq $UNKNOWN_LANGUAGE ]
 	then
 		echo "Start system: [ UNKNOWN LANGUAGE ]"
-		run_kvstore2pcsystem_c_and_other_language_robustly $START_COORDINATOR_AND_ALL_PARTICIPANTS
+		run_kvstore2pcsystem_c_and_other_language_robustly $1
 		retval=$?
 		if [ $retval -eq $SUCCESS ]
 		then
@@ -425,7 +425,7 @@ function run_kvstore2pcsystem_robustly
 		if [ $retval -eq $SUCCESS ]
 		then
 			echo "Start system: [ C/C++ ]"
-			run_kvstore2pcsystem_c_and_other_language_robustly $START_COORDINATOR_AND_ALL_PARTICIPANTS
+			run_kvstore2pcsystem_c_and_other_language_robustly $1
 			retval=$?
 			if [ $retval -eq $SUCCESS ]
 			then
@@ -442,7 +442,7 @@ function run_kvstore2pcsystem_robustly
 	if [ $programing_language -eq $JAVA ]
 	then
 		echo "Start system: [ JAVA ]"
-		run_kvstore2pcsystem_java_robustly $START_COORDINATOR_AND_ALL_PARTICIPANTS
+		run_kvstore2pcsystem_java_robustly $1
 		retval=$?
 		if [ $retval -eq $SUCCESS ]
 		then
@@ -456,7 +456,7 @@ function run_kvstore2pcsystem_robustly
 	if [ $programing_language -eq $PYTHON ]
 	then
 		echo "Start system: [ PYTHON ]"
-		run_kvstore2pcsystem_python_robustly $START_COORDINATOR_AND_ALL_PARTICIPANTS
+		run_kvstore2pcsystem_python_robustly $1
 		retval=$?
 		if [ $retval -eq $SUCCESS ]
 		then
@@ -473,7 +473,7 @@ function kill_and_restart_coordinator_robustly
 
 	kill -9 ${coordinator_pid}
 	sleep 1
-	run_kvstore2pcsystem_robustly START_COORDINATOR_ONLY
+	run_kvstore2pcsystem_robustly $START_COORDINATOR_ONLY
 
 	retval=$?
 	if [[ $retval -eq 0 ]]
@@ -512,7 +512,7 @@ function restart_kvstore2pcsystem_if_down_abnormally
 	if ! ps -p $coordinator_pid > /dev/null
 	then
 		kill_coordinator_and_all_participants
-		run_kvstore2pcsystem_robustly START_COORDINATOR_AND_ALL_PARTICIPANTS
+		run_kvstore2pcsystem_robustly $START_COORDINATOR_AND_ALL_PARTICIPANTS
 		return
 	fi
 
@@ -521,7 +521,7 @@ function restart_kvstore2pcsystem_if_down_abnormally
 		if ! ps -p ${participants_pid[i]} > /dev/null
 		then
 			kill_coordinator_and_all_participants
-			run_kvstore2pcsystem_robustly START_COORDINATOR_AND_ALL_PARTICIPANTS
+			run_kvstore2pcsystem_robustly $START_COORDINATOR_AND_ALL_PARTICIPANTS
 			return
 		fi
 	done
@@ -549,7 +549,8 @@ function send_set_command
 	    	break
 	    fi
 	done
-	printf -v set_result "$retval_set"
+
+	printf -v set_result "${retval_set}"
 }
 
 get_result=""
@@ -634,7 +635,7 @@ function set_tag
 
 printf -v standard_error ".ERROR\r\n"
 printf -v standard_ok "+OK\r\n"
-printf -v standard_nil "*1\r\n$3\r\nnil\r\n"
+printf -v standard_nil "*1\r\n\$3\r\nnil\r\n"
 
 standard_item1=""
 function test_item1
@@ -643,7 +644,7 @@ function test_item1
 	echo "---------------------------------- Test item 1 ----------------------------------"
 	echo "Test item 1. Test point: Run kvstore2pcsystem."
 
-	run_kvstore2pcsystem_robustly
+	run_kvstore2pcsystem_robustly $START_COORDINATOR_AND_ALL_PARTICIPANTS
 
 	retval=$?
 	if [[ $retval -eq $SUCCESS ]]
@@ -666,6 +667,7 @@ function test_item2
 	restart_kvstore2pcsystem_if_down_abnormally
 	send_set_command 9 item2_key 11 item2_value
 
+	echo "item set set_result: ${set_result}"
 	if [[ $set_result = $standard_item2 ]]
 	then
 		echo "============================ [PASSED] : Test item 2 ============================"
@@ -689,7 +691,7 @@ function test_item3
 
 	kill_and_restart_coordinator_robustly
 	send_get_command 9 item3_key
-
+	echo "get_result: ${get_result}"
 	if [[ $get_result = $standard_item3 ]]
 	then
 		echo "============================ [PASSED] : Test item 3 ============================"
@@ -753,7 +755,7 @@ function test_item6
 	set_tag
 	echo "---------------------------------- Test item 6 ----------------------------------"
 	echo "Test item 6. Test point: When associating a new value to an existing key," \
-	     " it should override the value of the existing entry,"
+	     " it should overwrite the value of the existing entry,"
 	# restart_kvstore2pcsystem_if_down_abnormally
 
 	send_set_command 9 item6_key 11 item6_value
@@ -859,6 +861,7 @@ function cloud_roll_up
 	if [[ ${TEST_RESULT_ARR[1]} -eq $FAILED ]]
 	then
 		echo "---------------------------------- Start system failed. Global test done ----------------------------------"
+		clean_up
 		return
 	fi
 	test_item2
