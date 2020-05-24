@@ -633,9 +633,9 @@ function set_tag
 	echo "                                       \|/                                   "
 }
 
-printf -v standard_error ".ERROR\r\n"
-printf -v standard_ok "+OK\r\n"
-printf -v standard_nil "*1\r\n\$3\r\nnil\r\n"
+printf -v standard_error ".ERROR\r"
+printf -v standard_ok "+OK\r"
+printf -v standard_nil "*1\r\n\$3\r\nnil\r"
 
 standard_item1=""
 function test_item1
@@ -679,7 +679,7 @@ function test_item2
 }
 
 
-printf -v standard_item3 "*1\r\n\$11\r\nitem3_value\r\n"
+printf -v standard_item3 "*1\r\n\$11\r\nitem3_value\r"
 function test_item3
 {
 	set_tag
@@ -725,7 +725,7 @@ function test_item4
 }
 
 
-printf -v standard_item5 ":2\r\n"
+printf -v standard_item5 ":2\r"
 function test_item5
 {
 	set_tag
@@ -749,7 +749,7 @@ function test_item5
 }
 
 
-printf -v standard_item6 "*1\r\n\$15\r\nitem6_value_new\r\n"
+printf -v standard_item6 "*1\r\n\$15\r\nitem6_value_new\r"
 function test_item6
 {
 	set_tag
@@ -799,7 +799,7 @@ function test_item7
 
 # ######################## advanced version ########################
 
-printf -v standard_item8 "*1\r\n\$17\r\nitem8_key_value_3\r\n"
+printf -v standard_item8 "*1\r\n\$17\r\nitem8_key_value_3\r"
 function test_item8
 {
 	set_tag
