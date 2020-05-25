@@ -838,7 +838,7 @@ function test_item9
 
 	send_get_command 9 item9_key
 
-	if [[ $get_result = $standard_item9 ]]
+	if [[ $get_result =~ $standard_item9 ]]
 	then
 		echo "============================ [PASSED] : Test item 9 ============================"
 		return $PASSED
