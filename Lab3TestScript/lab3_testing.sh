@@ -406,6 +406,12 @@ function run_kvstore2pcsystem_robustly
 
 	programing_language=$?
 
+	# Do make if there's a makefile regardless of in what language the system is written.
+	if [ -f ${LAB3_ABSOLUTE_PATH}/Makefile ] || [ -f ${LAB3_ABSOLUTE_PATH}/makefile ]
+	then
+		do_make
+	fi
+
 	# other language
 	if [ $programing_language -eq $UNKNOWN_LANGUAGE ]
 	then
@@ -424,7 +430,6 @@ function run_kvstore2pcsystem_robustly
 	# c or c++
 	if [ $programing_language -eq $C_OR_CPP ]
 	then
-		do_make
 		retval=$?
 		if [ $retval -eq $SUCCESS ]
 		then
