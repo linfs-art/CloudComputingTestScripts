@@ -936,7 +936,7 @@ function test_item10
 	sleep 10
 	kill_two_of_participants
 
-	send_get_command 10 item10_key
+	send_get_command 12 item10_key_2
 
 	if [[ $get_result = $standard_item10 ]]
 	then
@@ -960,11 +960,11 @@ function test_item11
 	echo "---------------------------------- Test item 11 ----------------------------------"
 	echo "Test item 11. Test point: ultimate version test."
 
-	send_set_command 12 item10_key_1 20 item11_key_1_value_1
-	send_set_command 12 item10_key_2 20 item11_key_2_value_2
+	send_set_command 12 item11_key_1 20 item11_key_1_value_1
+	send_set_command 12 item11_key_2 20 item11_key_2_value_2
 	kill_coordinator
 
-	send_get_command_ultimate_version 10 item11_key
+	send_get_command_ultimate_version 12 item11_key_2
 
 	if [[ $get_result = $standard_item11 ]]
 	then
@@ -1051,4 +1051,3 @@ prepare_test_env
 cloud_roll_up
 clean_up
 show_test_result
-
