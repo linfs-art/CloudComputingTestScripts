@@ -928,6 +928,9 @@ function test_item10
 	echo "---------------------------------- Test item 10 ----------------------------------"
 	echo "Test item 10. Test point: extreme version test."
 
+	# Restart all participants
+	restart_kvstore2pcsystem_if_down_abnormally
+
 	send_set_command 12 item10_key_1 20 item10_key_1_value_1
 	send_set_command 12 item10_key_2 20 item10_key_2_value_2
 	kill_one_of_participants
